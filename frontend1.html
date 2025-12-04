@@ -80,7 +80,6 @@
       align-items: center;
       justify-content: space-between;
       margin-bottom: 10px;
-      gap: 10px;
     }
 
     .badge {
@@ -93,7 +92,6 @@
       border: 1px solid rgba(148, 163, 184, 0.4);
       color: var(--muted);
       background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.1), transparent);
-      white-space: nowrap;
     }
 
     .badge-dot {
@@ -188,7 +186,7 @@
     }
 
     button.secondary:active {
-      box-shadow: none;
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
     }
 
     button[disabled] {
@@ -212,7 +210,7 @@
       line-height: 1.45;
       border: 1px solid rgba(31, 41, 55, 0.9);
       overflow-x: auto;
-      max-height: 260px;
+      max-height: 220px;
       white-space: pre-wrap;
       word-wrap: break-word;
     }
@@ -250,7 +248,6 @@
     .status-value {
       color: var(--text);
       font-weight: 500;
-      word-break: break-all;
     }
 
     .status-flag-ok {
@@ -265,7 +262,7 @@
       margin-top: 10px;
       border-radius: var(--radius-md);
       padding: 8px 10px;
-      background: rgba(127, 29, 29, 0.9);
+      background: rgba(127, 29, 29, 0.8);
       border: 1px solid #b91c1c;
       color: #fee2e2;
       font-size: 0.8rem;
@@ -305,7 +302,7 @@
 
     .output-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 10px;
     }
 
@@ -314,9 +311,6 @@
       border: 1px solid rgba(31, 41, 55, 0.9);
       background: radial-gradient(circle at top, rgba(15, 23, 42, 1), rgba(15, 23, 42, 0.96));
       padding: 8px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
     }
 
     .mini-card h3 {
@@ -344,7 +338,7 @@
     }
 
     .image-preview-wrapper img {
-      max-width: 220px;
+      max-width: 180px;
       border-radius: var(--radius-md);
       border: 1px solid rgba(31, 41, 55, 0.9);
       display: block;
@@ -362,21 +356,6 @@
     .text-mono {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
-
-    .ref-block {
-      margin-top: 8px;
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    .ref-block a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    .ref-block a:hover {
-      text-decoration: underline;
-    }
   </style>
 </head>
 <body>
@@ -384,9 +363,7 @@
     <div class="card-header">
       <div>
         <h1>BD&amp;A Workflow IMG</h1>
-        <div class="tagline">
-          GPT-5 chat in conversazione unica per C1–C3 · C4 auto-generato · Immagini opzionali via API
-        </div>
+        <div class="tagline">GPT-5 chat, conversazione unica per C1–C3 · C4 auto-generato · Immagini opzionali via API</div>
       </div>
       <div class="badge">
         <span class="badge-dot"></span>
@@ -411,7 +388,7 @@
           <option value="Sportello Immobiliare">Sportello Immobiliare</option>
           <option value="Sportello del Cittadino">Sportello del Cittadino</option>
         </select>
-        <div class="hint">Guidiamo template diversi per brand e per la Fase 3.</div>
+        <div class="hint">Guidiamo i template diversi per brand e fase 3.</div>
       </div>
 
       <div class="field-group">
@@ -458,9 +435,8 @@
       <div class="section-title" style="margin-top: 18px;">Immagine finale (da C4)</div>
       <p class="hint">
         Il backend genera il <span class="text-mono">Comando 4</span> come prompt per l'immagine.
-        Puoi usare il pulsante sotto per testare la chiamata
-        <span class="text-mono">/api/generate-image</span>
-        (se <span class="text-mono">gpt-image-1</span> è abilitato nel backend).
+        Puoi usare il pulsante sotto per testare la chiamata <span class="text-mono">/api/generate-image</span>
+        (se <span class="text-mono">gpt-image-1</span> è abilitato).
       </p>
 
       <div class="btn-row">
@@ -476,7 +452,9 @@
         <h2>Output workflow &amp; LLM</h2>
       </div>
 
-      <div class="meta-row" id="meta-row"></div>
+      <div class="meta-row" id="meta-row">
+        <!-- Aspect / size / backend info -->
+      </div>
 
       <div class="section-title">Comandi &amp; Risposte</div>
       <div class="output-grid">
@@ -531,9 +509,8 @@
   </div>
 
   <script>
-    // 🔗 Cambia QUI l'URL quando ngrok ti dà un nuovo tunnel.
-    // Se backend e frontend stanno sullo stesso dominio, puoi mettere "".
-    const API_BASE = "https://vanillic-wade-unwading.ngrok-free.dev";
+    // *** QUI puntiamo SEMPRE a Railway, non più locale ***
+    const API_BASE_URL = "https://bda-workflow-img-production.up.railway.app";
 
     let lastWorkflow = null;
     let imageApiEnabled = false;
@@ -588,23 +565,15 @@
       outputError.textContent = msg;
     }
 
-    function absoluteUrl(url) {
-      if (!url) return "";
-      if (url.startsWith("http://") || url.startsWith("https://")) return url;
-      // Assume path relativo dal backend
-      return API_BASE.replace(/\/+$/, "") + url;
-    }
-
     async function loadStatus() {
       try {
-        const res = await fetch(API_BASE.replace(/\/+$/, "") + "/status");
+        const res = await fetch(API_BASE_URL + "/status");
         if (!res.ok) {
           throw new Error("Status " + res.status);
         }
         const data = await res.json();
 
-        statusPillText.textContent =
-          data.status === "online" ? "Backend: online" : "Backend: offline";
+        statusPillText.textContent = data.status === "online" ? "Backend: online" : "Backend: offline";
 
         const openaiOk = !!data.openai_ready;
         const pillowOk = !!data.pillow_available;
@@ -650,10 +619,6 @@
               ${data.single_conversation ? "C1–C3 in 1 call" : "multi-call"}
             </div>
           </div>
-          <div class="status-pill">
-            <div class="status-label">API base</div>
-            <div class="status-value text-mono">${API_BASE}</div>
-          </div>
         `;
 
         showGlobalError("");
@@ -661,8 +626,8 @@
         console.error(err);
         statusPillText.textContent = "Backend: error";
         showGlobalError(
-          "Impossibile leggere /status. Verifica che il server FastAPI sia attivo e raggiungibile su: " +
-          API_BASE
+          "Impossibile leggere /status. Verifica che il backend sia raggiungibile su: " +
+          API_BASE_URL + "/status"
         );
       }
     }
@@ -690,10 +655,10 @@
       const cmd2 = data.comando_2 || data.comando2 || "";
       const cmd3 = data.comando_3 || data.comando3 || "";
       const cmd4 = data.comando_4 || data.comando4 || "";
-      const r1 = data.risposta1 || data.risposta_comando1 || data.risposta_c1 || "";
-      const r2 = data.risposta2 || data.risposta_comando2 || data.risposta_c2 || "";
-      const r3 = data.risposta3 || data.risposta_comando3 || data.risposta_c3 || "";
-      const pf = data.prompt_filtrato || data.prompt3_filtrato || data.prompt_filtrato_c3 || "";
+      const r1 = data.risposta1 || data.risposta_comando1 || "";
+      const r2 = data.risposta2 || data.risposta_comando2 || "";
+      const r3 = data.risposta3 || data.risposta_comando3 || "";
+      const pf = data.prompt_filtrato || data.prompt3_filtrato || "";
 
       c1PromptEl.textContent = cmd1;
       c1RespEl.textContent = r1;
@@ -706,32 +671,9 @@
 
       const aspect = data.aspect_ratio || "-";
       const sizePx = data.size_px || "-";
-      const refName = data.reference_image_name || "";
-      const refUrlRaw = data.reference_image_url || "";
-      const refUrl = refUrlRaw ? absoluteUrl(refUrlRaw) : "";
-
-      const azienda = aziendaEl.value || data.azienda || "-";
-      const formato = formatoEl.value || data.formato || "-";
-      const tipoSlide = tipoSlideEl.value || data.tipo_slide || "-";
-
-      let refHtml = "";
-      if (refName || refUrl) {
-        refHtml = `
-          <div class="ref-block">
-            <strong>Immagine di riferimento:</strong>
-            ${refName ? `<span class="text-mono">${refName}</span>` : ""}
-            ${refUrl ? ` · <a href="${refUrl}" target="_blank" rel="noopener noreferrer">Apri / Scarica</a>` : ""}
-          </div>
-        `;
-      }
-
       metaRowEl.innerHTML = `
-        <div class="meta-pill">Azienda: <span class="text-mono">${azienda}</span></div>
-        <div class="meta-pill">Formato: <span class="text-mono">${formato}</span></div>
-        <div class="meta-pill">Tipo slide: <span class="text-mono">${tipoSlide}</span></div>
         <div class="meta-pill">Aspect ratio: <span class="text-mono">${aspect}</span></div>
         <div class="meta-pill">Size (px): <span class="text-mono">${sizePx}</span></div>
-        ${refHtml}
       `;
 
       if (data.llm_backend_used) {
@@ -766,7 +708,7 @@
         fd.append("tipo_slide", tipoSlide);
         fd.append("copy", copy);
 
-        const res = await fetch(API_BASE.replace(/\/+$/, "") + "/api/workflow-text", {
+        const res = await fetch(API_BASE_URL + "/api/workflow-text", {
           method: "POST",
           body: fd
         });
@@ -776,9 +718,7 @@
           try {
             const errData = await res.json();
             if (errData && errData.detail) {
-              detail = typeof errData.detail === "string"
-                ? errData.detail
-                : JSON.stringify(errData.detail);
+              detail = errData.detail;
             }
           } catch (_) {}
           throw new Error(detail);
@@ -825,7 +765,7 @@
         fd.append("formato", formato);
         fd.append("comando4", cmd4);
 
-        const res = await fetch(API_BASE.replace(/\/+$/, "") + "/api/generate-image", {
+        const res = await fetch(API_BASE_URL + "/api/generate-image", {
           method: "POST",
           body: fd
         });
@@ -834,11 +774,7 @@
           let detail = "Errore HTTP " + res.status;
           try {
             const errData = await res.json();
-            if (errData && errData.detail) {
-              detail = typeof errData.detail === "string"
-                ? errData.detail
-                : JSON.stringify(errData.detail);
-            }
+            if (errData && errData.detail) detail = errData.detail;
           } catch (_) {}
           throw new Error(detail);
         }
@@ -851,14 +787,13 @@
         const note = data.note;
 
         if (url) {
-          const fullUrl = absoluteUrl(url);
-          imagePreviewImg.src = fullUrl;
+          imagePreviewImg.src = url;
           imageMetaEl.innerHTML = `
             <p><strong>File:</strong> ${name || "-"}</p>
             <p><strong>Aspect ratio:</strong> ${aspect || "-"}</p>
             <p><strong>Size px (target):</strong> ${sizePx || "-"}</p>
             ${note ? `<p><strong>Note:</strong> ${note}</p>` : ""}
-            <p><strong>Path pubblico:</strong> <span class="text-mono">${fullUrl}</span></p>
+            <p><strong>Path pubblico:</strong> <span class="text-mono">${url}</span></p>
           `;
           imagePreviewWrapper.style.display = "flex";
         } else {
@@ -888,8 +823,8 @@
       handleImageClick();
     });
 
-    // Kickoff: carica /status appena la pagina parte
     loadStatus();
   </script>
 </body>
 </html>
+
