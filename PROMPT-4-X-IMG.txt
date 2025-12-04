@@ -1,0 +1,11 @@
+PROMPT 4 X IMG
+
+Azienda: {{azienda}}
+Progetto: {{progetto}}
+Immagine di riferimento: {{immagine_azienda}}
+Tipo slide: {{tipo_slide}}
+Copy: {{copy}}
+
+Genera un'immagine hyper-realistica, ispirandoti alla seguente immagine allegata in questo prompt in corrispondenza del seguente prompt qui sotto:
+
+PROMPT generato: {{prompt_generato}}

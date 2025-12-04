@@ -1,0 +1,18 @@
+PROMPT 1 X IMG
+
+Azienda: {{azienda}}
+
+Progetto: {{progetto}}
+
+Immagine di riferimento: {{immagine_azienda}}
+
+Tipo/Indicazione slide: {{tipo_slide}}
+
+ISTRUZIONI:
+Immedesimati in un esperto di creazione visual: il tuo compito è generare idee estremamente creative che si basano sul tema della foto allegata ({{immagine_azienda}}), focalizzandoti sia sul messaggio da trasmettere tramite la slide ({{tipo_slide}}), sia sugli elementi visivi che dovranno rappresentare il concetto del copy. 
+La visual deve contenere molti elementi grafici d’impatto, e non solo sfondo, logo e copy: inserisci oggetti e simboli che rafforzano la comprensione immediata del messaggio. Preferisci un logo piccolo e discreto se c’è bisogno di spazio per gli elementi visivi.
+Evita qualsiasi oggetto decorativo superfluo o testo aggiuntivo non utile alla comunicazione.
+
+COPY:
+
+{{copy}}

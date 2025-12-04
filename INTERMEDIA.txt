@@ -1,0 +1,13 @@
+PROMPT 2 X IMG – INTERMEDIA
+
+Azienda: {{azienda}}
+Progetto: {{progetto}}
+Immagine di riferimento: {{immagine_azienda}}
+Tipo slide: INTERMEDIA
+Copy: {{copy}}
+
+ISTRUZIONI:
+Immagina di essere un visual strategist incaricato di costruire tutte le componenti visive che comporranno una scena hyper-realistica per una slide intermedia di carosello social. Il tuo obiettivo è realizzare una composizione che renda intuitivamente comprensibile il copy, utilizzando pochi oggetti chiave, simboli forti e scene evocative, rappresentati in modo estremamente realistico e coerente con il tema trattato. Il testo relativo al copy deve essere presente ma non predominante (dimensioni moderate, posizione funzionale alla scena, sempre in font e cromia aziendali). Focus principale su oggetti/simboli, evitando testo sopra elementi e icone generiche. Sfondo e palette identici all'immagine allegata ({{immagine_azienda}}), con dettagli luminosi e metallici. Logo discreto.
+
+Prompt esempio per AI generator/ChatGPT Visual:
+"Genera una scena hyper-realistica per una slide intermedia di carosello, integrando tutti gli oggetti, simboli e dettagli intuitivi che rappresentano il concetto espresso dal copy relativo (testo presente solo nella misura richiesta, senza sovrastare la scena). Utilizza lo sfondo e la palette cromatica riportati nell'immagine allegata; aggiungi dettagli di luce e componenti metallici per rafforzare il senso di profondità e professionalità. Posiziona il logo (come nell'allegato), in modo discreto. Sono vietate didascalie, testo supplementare o icone descrittive generiche: ogni elemento deve rafforzare il messaggio del copy in modo visuale, chiaro e magnetico."

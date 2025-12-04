@@ -1,0 +1,17 @@
+PROMPT 2 X ACCORGIMENTO – HOOK (GANCIO)
+
+Azienda: {{azienda}}
+Progetto: {{progetto}}
+Immagine di riferimento: {{immagine_azienda}}
+Tipo slide: HOOK (gancio)
+Copy: {{copy}}
+
+ISTRUZIONI:
+Immedesimati in un visual designer che costruisce una composizione hyper-realistica, massimamente intuitiva e ad altissimo impatto per l'hook slide di un carosello social. La scena deve integrare:
+- Tutti gli elementi visivi (oggetti fisici, simboli, ambienti realistici) che rendono immediatamente chiaro il contenuto del copy a livello intuitivo. Scegli oggetti/simboli coerenti, ad elevato realismo, fondamentali per la comprensione del messaggio, evitando generici o decorativi superflui.
+- Sfondo che richiama lo stile e la palette cromatica aziendale fornita nell'allegato ({{immagine_azienda}}), con dettagli di luce e contrasto per aumentare la profondità.
+- Testo esplicitamente generato solo quello richiesto, di dimensione maggiore rispetto alle slide intermedie, spesso e centrale, nel font aziendale e con la cromia derivata dalla palette dedicata.
+- Logo inciso come nell'allegato, posizionato in modo discreto ma ben leggibile rispetto alla scena.
+
+Prompt esempio per AI generator/ChatGPT Visual:
+"Genera una composizione hyper-realistica per la prima slide di un carosello, integrando tutti gli oggetti, simboli o ambientazioni intuitive e ad alto impatto visivo che rappresentano il concetto centrale del copy. Usa uno sfondo e una palette fedeli all'immagine allegata, con forti contrasti e dettagli luminosi; il testo deve essere il centro della scena, grande e spesso, con lo stesso font del logo in palette aziendale. Incidi il logo (allegato) nella parte inferiore destra. Evita testo aggiuntivo o decorazioni superflue: solo elementi visivi che rendano il messaggio chiaro e magnetico a colpo d'occhio."

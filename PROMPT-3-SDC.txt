@@ -1,0 +1,10 @@
+PROMPT 3 X IMG – Sportello del Cittadino
+
+Azienda: Sportello del Cittadino
+Progetto: {{progetto}}
+Immagine di riferimento: WhatsApp-Image-2025-10-28-at-7.13.01-PM.jpg
+Tipo slide: {{tipo_slide}}
+Copy: {{copy}}
+
+Prompt:
+Esegui un’analisi critica e aggiorna il prompt dell’immagine hyper-realistica generata per il mio unico copy, assumendo il ruolo di visual-copy analyzer. Il visual deve essere facilmente leggibile e comprensibile a colpo d’occhio: palette e sfondo rigorosamente come nell’immagine allegata, testo spesso e centrale color blu con bordo giallo vivace, usando il font originale del logo allegato. Il logo, integrato perfettamente come da esempio allegato, apparirà in basso a destra senza prevalere sugli altri elementi. Escludi qualsiasi icona o dettaglio che non sia funzionale alla comunicazione diretta del messaggio. Ogni scelta deve mirare a efficienza comunicativa, coerenza di brand e immediatezza visiva per la nicchia civilistica.

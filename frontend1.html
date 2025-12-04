@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>BD&A Workflow IMG – GPT-5 Chat Single Conversation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #050816;
+      --panel: #0f172a;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.15);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --danger: #f97373;
+      --success: #4ade80;
+      --border: #1f2937;
+      --radius-lg: 18px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #020617 0, #020617 40%, #000 100%);
+      color: var(--text);
+    }
+
+    h1, h2, h3 {
+      margin: 0 0 8px;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+    }
+
+    h2 {
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    p {
+      margin: 4px 0 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.97), rgba(15, 23, 42, 0.9));
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(18px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      gap: 10px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: var(--muted);
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.1), transparent);
+      white-space: nowrap;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--success);
+      box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.2);
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .field-group {
+      margin-bottom: 12px;
+    }
+
+    input[type="text"],
+    select,
+    textarea {
+      width: 100%;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    input[type="text"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.5);
+      background: rgba(15, 23, 42, 1);
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .inline-fields {
+      display: flex;
+      gap: 10px;
+    }
+
+    .inline-fields > .field-group {
+      flex: 1;
+    }
+
+    button {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s ease, transform 0.08s ease, box-shadow 0.15s ease;
+      background: radial-gradient(circle at top left, #38bdf8, #0ea5e9);
+      color: #0b1120;
+      box-shadow: 0 10px 25px rgba(56, 189, 248, 0.35);
+    }
+
+    button:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow: 0 6px 18px rgba(56, 189, 248, 0.3);
+    }
+
+    button.secondary {
+      background: rgba(15, 23, 42, 1);
+      color: var(--muted);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: none;
+    }
+
+    button.secondary:active {
+      box-shadow: none;
+    }
+
+    button[disabled] {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+
+    pre {
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 1), rgba(15, 23, 42, 0.96));
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      overflow-x: auto;
+      max-height: 260px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .tagline {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .status-pill {
+      border-radius: var(--radius-md);
+      padding: 6px 9px;
+      border: 1px solid rgba(31, 41, 55, 0.8);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 1), rgba(15, 23, 42, 0.95));
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .status-label {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.7rem;
+    }
+
+    .status-value {
+      color: var(--text);
+      font-weight: 500;
+      word-break: break-all;
+    }
+
+    .status-flag-ok {
+      color: var(--success);
+    }
+
+    .status-flag-bad {
+      color: var(--danger);
+    }
+
+    .error-box {
+      margin-top: 10px;
+      border-radius: var(--radius-md);
+      padding: 8px 10px;
+      background: rgba(127, 29, 29, 0.9);
+      border: 1px solid #b91c1c;
+      color: #fee2e2;
+      font-size: 0.8rem;
+      display: none;
+    }
+
+    .meta-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .meta-pill {
+      border-radius: 999px;
+      padding: 3px 9px;
+      border: 1px solid rgba(75, 85, 99, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .section-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin: 12px 0 6px;
+      color: var(--text);
+    }
+
+    .pill-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .output-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .mini-card {
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 1), rgba(15, 23, 42, 0.96));
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .mini-card h3 {
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    .mini-card-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .image-preview-wrapper {
+      margin-top: 10px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      background: rgba(15, 23, 42, 0.9);
+      padding: 10px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .image-preview-wrapper img {
+      max-width: 220px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      display: block;
+    }
+
+    .image-meta {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .image-meta strong {
+      color: var(--text);
+    }
+
+    .text-mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    .ref-block {
+      margin-top: 8px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .ref-block a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .ref-block a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="card" style="margin-bottom: 18px;">
+    <div class="card-header">
+      <div>
+        <h1>BD&amp;A Workflow IMG</h1>
+        <div class="tagline">
+          GPT-5 chat in conversazione unica per C1–C3 · C4 auto-generato · Immagini opzionali via API
+        </div>
+      </div>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span id="status-pill-text">Backend: checking…</span>
+      </div>
+    </div>
+    <div class="status-grid" id="status-grid"></div>
+    <div class="error-box" id="global-error"></div>
+  </div>
+
+  <div class="layout">
+    <!-- LEFT: INPUT -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Input workflow</h2>
+      </div>
+
+      <div class="field-group">
+        <label for="azienda">Azienda</label>
+        <select id="azienda">
+          <option value="BD&A">BD&amp;A</option>
+          <option value="Sportello Immobiliare">Sportello Immobiliare</option>
+          <option value="Sportello del Cittadino">Sportello del Cittadino</option>
+        </select>
+        <div class="hint">Guidiamo template diversi per brand e per la Fase 3.</div>
+      </div>
+
+      <div class="field-group">
+        <label for="progetto">Progetto / Campagna</label>
+        <input type="text" id="progetto" placeholder="Es. Settimana 1 - Post 1" />
+      </div>
+
+      <div class="inline-fields">
+        <div class="field-group">
+          <label for="formato">Formato</label>
+          <select id="formato">
+            <option value="post">Post / Carosello (1:1)</option>
+            <option value="storia">Storia (9:16)</option>
+          </select>
+          <div class="hint">1:1 per feed, 9:16 per stories.</div>
+        </div>
+        <div class="field-group">
+          <label for="tipo_slide">Tipo slide</label>
+          <select id="tipo_slide">
+            <option value="gancio">Gancio</option>
+            <option value="intermedia">Intermedia</option>
+            <option value="cta">CTA</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="copy">Copy di partenza</label>
+        <textarea id="copy" placeholder="Inserisci il copy grezzo da trasformare nel workflow C1–C3…"></textarea>
+        <div class="hint">
+          Questo testo alimenta tutti i comandi. Mantieni il tone of voice coerente col brand.
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button id="btn-workflow">
+          <span>1) Genera Workflow Testo (C1–C3 + C4)</span>
+        </button>
+        <button id="btn-clear" class="secondary" type="button">
+          Pulisci output
+        </button>
+      </div>
+
+      <div class="section-title" style="margin-top: 18px;">Immagine finale (da C4)</div>
+      <p class="hint">
+        Il backend genera il <span class="text-mono">Comando 4</span> come prompt per l'immagine.
+        Puoi usare il pulsante sotto per testare la chiamata
+        <span class="text-mono">/api/generate-image</span>
+        (se <span class="text-mono">gpt-image-1</span> è abilitato nel backend).
+      </p>
+
+      <div class="btn-row">
+        <button id="btn-image" class="secondary" type="button" disabled>
+          2) Genera immagine da C4 (API immagini)
+        </button>
+      </div>
+    </div>
+
+    <!-- RIGHT: OUTPUT -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Output workflow &amp; LLM</h2>
+      </div>
+
+      <div class="meta-row" id="meta-row"></div>
+
+      <div class="section-title">Comandi &amp; Risposte</div>
+      <div class="output-grid">
+        <div class="mini-card">
+          <div class="mini-card-label">C1</div>
+          <h3>Analisi brand / contesto</h3>
+          <div class="pill-label">Prompt C1</div>
+          <pre id="c1-prompt"></pre>
+          <div class="pill-label">Risposta C1</div>
+          <pre id="c1-response"></pre>
+        </div>
+
+        <div class="mini-card">
+          <div class="mini-card-label">C2</div>
+          <h3>Ottimizzazione copy slide</h3>
+          <div class="pill-label">Prompt C2</div>
+          <pre id="c2-prompt"></pre>
+          <div class="pill-label">Risposta C2</div>
+          <pre id="c2-response"></pre>
+        </div>
+
+        <div class="mini-card">
+          <div class="mini-card-label">C3</div>
+          <h3>Prompt immagine dettagliato</h3>
+          <div class="pill-label">Prompt C3</div>
+          <pre id="c3-prompt"></pre>
+          <div class="pill-label">Risposta C3</div>
+          <pre id="c3-response"></pre>
+        </div>
+
+        <div class="mini-card">
+          <div class="mini-card-label">C4</div>
+          <h3>Comando finale immagine</h3>
+          <div class="pill-label">Comando 4 (testo pronto per image API)</div>
+          <pre id="c4-prompt"></pre>
+          <div class="pill-label">Prompt filtrato da C3</div>
+          <pre id="c3-filtered"></pre>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-top: 14px;">LLM backend</div>
+      <pre id="llm-backend" class="text-mono"></pre>
+
+      <div class="section-title" style="margin-top: 14px;">Immagine generata (se API immagini attiva)</div>
+      <div id="image-preview" class="image-preview-wrapper" style="display:none;">
+        <img id="image-preview-img" src="" alt="Immagine generata" />
+        <div class="image-meta" id="image-meta"></div>
+      </div>
+
+      <div class="error-box" id="output-error"></div>
+    </div>
+  </div>
+
+  <script>
+    // 🔗 Cambia QUI l'URL quando ngrok ti dà un nuovo tunnel.
+    // Se backend e frontend stanno sullo stesso dominio, puoi mettere "".
+    const API_BASE = "https://vanillic-wade-unwading.ngrok-free.dev";
+
+    let lastWorkflow = null;
+    let imageApiEnabled = false;
+
+    const statusPillText = document.getElementById("status-pill-text");
+    const statusGrid = document.getElementById("status-grid");
+    const globalError = document.getElementById("global-error");
+    const outputError = document.getElementById("output-error");
+
+    const aziendaEl = document.getElementById("azienda");
+    const progettoEl = document.getElementById("progetto");
+    const formatoEl = document.getElementById("formato");
+    const tipoSlideEl = document.getElementById("tipo_slide");
+    const copyEl = document.getElementById("copy");
+
+    const btnWorkflow = document.getElementById("btn-workflow");
+    const btnClear = document.getElementById("btn-clear");
+    const btnImage = document.getElementById("btn-image");
+
+    const c1PromptEl = document.getElementById("c1-prompt");
+    const c1RespEl = document.getElementById("c1-response");
+    const c2PromptEl = document.getElementById("c2-prompt");
+    const c2RespEl = document.getElementById("c2-response");
+    const c3PromptEl = document.getElementById("c3-prompt");
+    const c3RespEl = document.getElementById("c3-response");
+    const c4PromptEl = document.getElementById("c4-prompt");
+    const c3FilteredEl = document.getElementById("c3-filtered");
+    const llmBackendEl = document.getElementById("llm-backend");
+
+    const metaRowEl = document.getElementById("meta-row");
+    const imagePreviewWrapper = document.getElementById("image-preview");
+    const imagePreviewImg = document.getElementById("image-preview-img");
+    const imageMetaEl = document.getElementById("image-meta");
+
+    function showGlobalError(msg) {
+      if (!msg) {
+        globalError.style.display = "none";
+        globalError.textContent = "";
+        return;
+      }
+      globalError.style.display = "block";
+      globalError.textContent = msg;
+    }
+
+    function showOutputError(msg) {
+      if (!msg) {
+        outputError.style.display = "none";
+        outputError.textContent = "";
+        return;
+      }
+      outputError.style.display = "block";
+      outputError.textContent = msg;
+    }
+
+    function absoluteUrl(url) {
+      if (!url) return "";
+      if (url.startsWith("http://") || url.startsWith("https://")) return url;
+      // Assume path relativo dal backend
+      return API_BASE.replace(/\/+$/, "") + url;
+    }
+
+    async function loadStatus() {
+      try {
+        const res = await fetch(API_BASE.replace(/\/+$/, "") + "/status");
+        if (!res.ok) {
+          throw new Error("Status " + res.status);
+        }
+        const data = await res.json();
+
+        statusPillText.textContent =
+          data.status === "online" ? "Backend: online" : "Backend: offline";
+
+        const openaiOk = !!data.openai_ready;
+        const pillowOk = !!data.pillow_available;
+        const imgApi = !!data.image_api_enabled;
+
+        imageApiEnabled = imgApi;
+        btnImage.disabled = !imgApi;
+
+        statusGrid.innerHTML = `
+          <div class="status-pill">
+            <div class="status-label">OpenAI</div>
+            <div class="status-value ${openaiOk ? "status-flag-ok" : "status-flag-bad"}">
+              ${openaiOk ? "ready" : "missing key / SDK"}
+            </div>
+          </div>
+          <div class="status-pill">
+            <div class="status-label">Chat model</div>
+            <div class="status-value">${data.chat_model || "-"}</div>
+          </div>
+          <div class="status-pill">
+            <div class="status-label">Fallback</div>
+            <div class="status-value">${data.fallback_model || "-"}</div>
+          </div>
+          <div class="status-pill">
+            <div class="status-label">Vision model</div>
+            <div class="status-value">${data.vision_model || "-"}</div>
+          </div>
+          <div class="status-pill">
+            <div class="status-label">Image model</div>
+            <div class="status-value ${imgApi ? "status-flag-ok" : "status-flag-bad"}">
+              ${imgApi ? (data.image_model || "enabled") : "disabled"}
+            </div>
+          </div>
+          <div class="status-pill">
+            <div class="status-label">Pillow</div>
+            <div class="status-value ${pillowOk ? "status-flag-ok" : "status-flag-bad"}">
+              ${pillowOk ? "installed" : "not installed"}
+            </div>
+          </div>
+          <div class="status-pill">
+            <div class="status-label">Single conversation</div>
+            <div class="status-value ${data.single_conversation ? "status-flag-ok" : ""}">
+              ${data.single_conversation ? "C1–C3 in 1 call" : "multi-call"}
+            </div>
+          </div>
+          <div class="status-pill">
+            <div class="status-label">API base</div>
+            <div class="status-value text-mono">${API_BASE}</div>
+          </div>
+        `;
+
+        showGlobalError("");
+      } catch (err) {
+        console.error(err);
+        statusPillText.textContent = "Backend: error";
+        showGlobalError(
+          "Impossibile leggere /status. Verifica che il server FastAPI sia attivo e raggiungibile su: " +
+          API_BASE
+        );
+      }
+    }
+
+    function clearOutputs() {
+      lastWorkflow = null;
+      c1PromptEl.textContent = "";
+      c1RespEl.textContent = "";
+      c2PromptEl.textContent = "";
+      c2RespEl.textContent = "";
+      c3PromptEl.textContent = "";
+      c3RespEl.textContent = "";
+      c4PromptEl.textContent = "";
+      c3FilteredEl.textContent = "";
+      llmBackendEl.textContent = "";
+      metaRowEl.innerHTML = "";
+      imagePreviewWrapper.style.display = "none";
+      imagePreviewImg.src = "";
+      imageMetaEl.textContent = "";
+      showOutputError("");
+    }
+
+    function renderWorkflow(data) {
+      const cmd1 = data.comando_1 || data.comando1 || "";
+      const cmd2 = data.comando_2 || data.comando2 || "";
+      const cmd3 = data.comando_3 || data.comando3 || "";
+      const cmd4 = data.comando_4 || data.comando4 || "";
+      const r1 = data.risposta1 || data.risposta_comando1 || data.risposta_c1 || "";
+      const r2 = data.risposta2 || data.risposta_comando2 || data.risposta_c2 || "";
+      const r3 = data.risposta3 || data.risposta_comando3 || data.risposta_c3 || "";
+      const pf = data.prompt_filtrato || data.prompt3_filtrato || data.prompt_filtrato_c3 || "";
+
+      c1PromptEl.textContent = cmd1;
+      c1RespEl.textContent = r1;
+      c2PromptEl.textContent = cmd2;
+      c2RespEl.textContent = r2;
+      c3PromptEl.textContent = cmd3;
+      c3RespEl.textContent = r3;
+      c4PromptEl.textContent = cmd4;
+      c3FilteredEl.textContent = pf;
+
+      const aspect = data.aspect_ratio || "-";
+      const sizePx = data.size_px || "-";
+      const refName = data.reference_image_name || "";
+      const refUrlRaw = data.reference_image_url || "";
+      const refUrl = refUrlRaw ? absoluteUrl(refUrlRaw) : "";
+
+      const azienda = aziendaEl.value || data.azienda || "-";
+      const formato = formatoEl.value || data.formato || "-";
+      const tipoSlide = tipoSlideEl.value || data.tipo_slide || "-";
+
+      let refHtml = "";
+      if (refName || refUrl) {
+        refHtml = `
+          <div class="ref-block">
+            <strong>Immagine di riferimento:</strong>
+            ${refName ? `<span class="text-mono">${refName}</span>` : ""}
+            ${refUrl ? ` · <a href="${refUrl}" target="_blank" rel="noopener noreferrer">Apri / Scarica</a>` : ""}
+          </div>
+        `;
+      }
+
+      metaRowEl.innerHTML = `
+        <div class="meta-pill">Azienda: <span class="text-mono">${azienda}</span></div>
+        <div class="meta-pill">Formato: <span class="text-mono">${formato}</span></div>
+        <div class="meta-pill">Tipo slide: <span class="text-mono">${tipoSlide}</span></div>
+        <div class="meta-pill">Aspect ratio: <span class="text-mono">${aspect}</span></div>
+        <div class="meta-pill">Size (px): <span class="text-mono">${sizePx}</span></div>
+        ${refHtml}
+      `;
+
+      if (data.llm_backend_used) {
+        llmBackendEl.textContent = JSON.stringify(data.llm_backend_used, null, 2);
+      } else {
+        llmBackendEl.textContent = "// Nessun dettaglio backend LLM nel payload.";
+      }
+
+      btnImage.disabled = !imageApiEnabled || !cmd4;
+    }
+
+    async function handleWorkflowClick() {
+      showOutputError("");
+      btnWorkflow.disabled = true;
+      btnWorkflow.textContent = "Generazione in corso…";
+
+      try {
+        const azienda = aziendaEl.value.trim();
+        const progetto = progettoEl.value.trim();
+        const formato = formatoEl.value;
+        const tipoSlide = tipoSlideEl.value;
+        const copy = copyEl.value.trim();
+
+        if (!azienda || !progetto || !formato || !tipoSlide || !copy) {
+          throw new Error("Compila tutti i campi: Azienda, Progetto, Formato, Tipo slide, Copy.");
+        }
+
+        const fd = new FormData();
+        fd.append("azienda", azienda);
+        fd.append("progetto", progetto);
+        fd.append("formato", formato);
+        fd.append("tipo_slide", tipoSlide);
+        fd.append("copy", copy);
+
+        const res = await fetch(API_BASE.replace(/\/+$/, "") + "/api/workflow-text", {
+          method: "POST",
+          body: fd
+        });
+
+        if (!res.ok) {
+          let detail = "Errore HTTP " + res.status;
+          try {
+            const errData = await res.json();
+            if (errData && errData.detail) {
+              detail = typeof errData.detail === "string"
+                ? errData.detail
+                : JSON.stringify(errData.detail);
+            }
+          } catch (_) {}
+          throw new Error(detail);
+        }
+
+        const data = await res.json();
+        lastWorkflow = data;
+        renderWorkflow(data);
+      } catch (err) {
+        console.error(err);
+        showOutputError("Errore nella generazione del workflow: " + err.message);
+      } finally {
+        btnWorkflow.disabled = false;
+        btnWorkflow.textContent = "1) Genera Workflow Testo (C1–C3 + C4)";
+      }
+    }
+
+    async function handleImageClick() {
+      showOutputError("");
+      imagePreviewWrapper.style.display = "none";
+      imagePreviewImg.src = "";
+      imageMetaEl.textContent = "";
+
+      if (!lastWorkflow) {
+        showOutputError("Genera prima il workflow testo (C1–C3 + C4).");
+        return;
+      }
+
+      const cmd4 = lastWorkflow.comando_4 || lastWorkflow.comando4 || "";
+      if (!cmd4) {
+        showOutputError("Comando 4 non disponibile nel workflow corrente.");
+        return;
+      }
+
+      btnImage.disabled = true;
+      btnImage.textContent = "Generazione immagine…";
+
+      try {
+        const azienda = aziendaEl.value.trim();
+        const formato = formatoEl.value;
+
+        const fd = new FormData();
+        fd.append("azienda", azienda);
+        fd.append("formato", formato);
+        fd.append("comando4", cmd4);
+
+        const res = await fetch(API_BASE.replace(/\/+$/, "") + "/api/generate-image", {
+          method: "POST",
+          body: fd
+        });
+
+        if (!res.ok) {
+          let detail = "Errore HTTP " + res.status;
+          try {
+            const errData = await res.json();
+            if (errData && errData.detail) {
+              detail = typeof errData.detail === "string"
+                ? errData.detail
+                : JSON.stringify(errData.detail);
+            }
+          } catch (_) {}
+          throw new Error(detail);
+        }
+
+        const data = await res.json();
+        const url = data.generated_image_url;
+        const name = data.generated_image_name;
+        const aspect = data.aspect_ratio;
+        const sizePx = data.size_px;
+        const note = data.note;
+
+        if (url) {
+          const fullUrl = absoluteUrl(url);
+          imagePreviewImg.src = fullUrl;
+          imageMetaEl.innerHTML = `
+            <p><strong>File:</strong> ${name || "-"}</p>
+            <p><strong>Aspect ratio:</strong> ${aspect || "-"}</p>
+            <p><strong>Size px (target):</strong> ${sizePx || "-"}</p>
+            ${note ? `<p><strong>Note:</strong> ${note}</p>` : ""}
+            <p><strong>Path pubblico:</strong> <span class="text-mono">${fullUrl}</span></p>
+          `;
+          imagePreviewWrapper.style.display = "flex";
+        } else {
+          showOutputError("Immagine generata ma URL mancante nel payload.");
+        }
+      } catch (err) {
+        console.error(err);
+        showOutputError("Errore generazione immagine: " + err.message);
+      } finally {
+        btnImage.disabled = !imageApiEnabled || !lastWorkflow;
+        btnImage.textContent = "2) Genera immagine da C4 (API immagini)";
+      }
+    }
+
+    btnWorkflow.addEventListener("click", function (e) {
+      e.preventDefault();
+      handleWorkflowClick();
+    });
+
+    btnClear.addEventListener("click", function (e) {
+      e.preventDefault();
+      clearOutputs();
+    });
+
+    btnImage.addEventListener("click", function (e) {
+      e.preventDefault();
+      handleImageClick();
+    });
+
+    // Kickoff: carica /status appena la pagina parte
+    loadStatus();
+  </script>
+</body>
+</html>

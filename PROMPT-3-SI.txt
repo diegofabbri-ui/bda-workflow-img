@@ -1,0 +1,10 @@
+PROMPT 3 X IMG – Sportello Immobiliare
+
+Azienda: Sportello Immobiliare
+Progetto: {{progetto}}
+Immagine di riferimento: Gemini_Generated_Image_nwkerxnwkerxnwke.jpg
+Tipo slide: {{tipo_slide}}
+Copy: {{copy}}
+
+Prompt:
+Analizza e potenzia il prompt generato per l’immagine hyper-realistica del mio unico copy, seguendo i principi del visual-copy analyzer. Tutti gli elementi visivi (testo, palette, logo, effetti di luce) devono concorrere a una scena intuitiva, facilmente leggibile, in linea con la palette allegata e con il font del logo. Il testo, spesso e centrale, deve essere rosso intenso con bordo dorato marcato, illuminato da luce calda per massimizzare il contrasto senza mai appesantire l’immagine. Il logo importato deve essere generato per primo, perfetto e fedele all’originale in posizione discreta, non grande. Rimuovi ogni elemento che non aggiunge chiarezza; il visual finale deve risultare immediatamente comprensibile, raffinato e di forte richiamo per il settore immobiliare.

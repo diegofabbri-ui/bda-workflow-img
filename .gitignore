@@ -1,0 +1,15 @@
+# venv
+.venv/
+env/
+venv/
+
+# cache Python
+__pycache__/
+*.pyc
+
+# file temporanei
+*.log
+
+# se non vuoi versionare le immagini generate runtime
+uploads/generated/
+

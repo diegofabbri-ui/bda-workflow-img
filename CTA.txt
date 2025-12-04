@@ -1,0 +1,13 @@
+PROMPT 2 X ACCORGIMENTO – CTA
+
+Azienda: {{azienda}}
+Progetto: {{progetto}}
+Immagine di riferimento: {{immagine_azienda}}
+Tipo slide: CTA
+Copy: {{copy}}
+
+ISTRUZIONI:
+Immedesimati in un visual designer che costruisce una composizione hyper-realistica, massimamente intuitiva e ad altissimo impatto per la CTA slide di un carosello social. Integra tutti gli elementi visivi (oggetti, simboli) che rendono evidente il messaggio del copy, sfondo richiamante la palette aziendale fornita nell'allegato ({{immagine_azienda}}). Testo grande, spesso e centrale, con font e cromia aziendale. Logo inciso nella parte inferiore destra, posizionato bene ma discreto.
+
+Prompt esempio per AI generator/ChatGPT Visual:
+"Genera una composizione hyper-realistica per l'ultima slide di un carosello, integrando tutti gli oggetti, simboli o ambientazioni intuitive e ad alto impatto visivo che rappresentano il concetto centrale del copy. Usa uno sfondo e una palette fedeli all'immagine allegata, con forti contrasti e dettagli luminosi; il testo deve essere il centro della scena, grande e spesso, con lo stesso font del logo in palette aziendale. Incidi il logo (allegato) nella parte inferiore destra. Evita testo aggiuntivo o decorazioni superflue: solo elementi visivi che rendano il messaggio chiaro e magnetico a colpo d'occhio."

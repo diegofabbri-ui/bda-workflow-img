@@ -1,0 +1,10 @@
+PROMPT 3 X IMG – BD&A
+
+Azienda: BD&A
+Progetto: {{progetto}}
+Immagine di riferimento: WhatsApp-Image-2025-10-16-at-10.32.55-PM.jpg
+Tipo slide: {{tipo_slide}}
+Copy: {{copy}}
+
+Prompt:
+Analizza e migliora il prompt generato per l’immagine hyper-realistica collegata al mio unico copy appena creato. Assicurati che ogni elemento visivo (testo, logo, sfondo, dettagli) sia intuitivamente collegato al copy e di facile comprensione per chi visualizza la scena. Verifica che la palette cromatica segua esattamente quella dell’immagine allegata, che il testo sia centrato, spesso, imponente e con il font identico al logo. Il logo, in bianco a rilievo come da riferimento, deve apparire in basso a destra su sfondo sfumato, senza essere sovrastato da altri elementi. Elimina qualsiasi oggetto decorativo o icona generica non utile al messaggio. Ottimizza la composizione affinché l’insieme sia visivamente pulito, professionale, coerente e capace di trasmettere il messaggio con immediatezza ed eleganza.
